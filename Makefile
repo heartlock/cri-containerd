@@ -1,3 +1,17 @@
+# Copyright 2017 The Kubernetes Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 GO ?= go
 EPOCH_TEST_COMMIT ?= f2925f58acc259c4b894353f5fc404bdeb40028e
 PROJECT := github.com/kubernetes-incubator/cri-containerd
@@ -28,12 +42,12 @@ endif
 verify: lint gofmt
 
 lint: check-gopath
-	@echo "checking lint"
-	@./hack/lint.sh
+	@./hack/repo-infra/verify/go-tools/verify-gometalinter.sh
+	@./hack/repo-infra/verify/verify-go-src.sh -r $(shell pwd) -v
+	@./hack/repo-infra/verify/verify-boilerplate.sh
 
 gofmt:
-	@echo "checking gofmt"
-	@./hack/verify-gofmt.sh
+	@./hack/repo-infra/verify/go-tools/verify-gofmt.sh
 
 cri-containerd: check-gopath
 	$(GO) build -o $(BUILD_DIR)/$@ \
